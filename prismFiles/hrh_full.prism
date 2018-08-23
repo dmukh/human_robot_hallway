@@ -1,0 +1,196 @@
+smg
+
+const int sizeX=14;
+const int sizeY=4;
+const int maxCount=10;
+global turn: [0..2] init 0;
+global goal: [1..3] init 3;
+global reached: [0..3] init 0;
+global count: [0..maxCount] init 0;
+
+global robotX : [0..sizeX] init sizeX;
+global robotY : [0..sizeY] init 2;
+global humanX : [0..sizeX] init 0;
+global humanY : [0..sizeY] init 2;
+const int g1X=2;
+const int g1Y=4;
+const int g2X=7;
+const int g2Y=0;
+const int g3X=14;
+const int g3Y=2;
+
+
+player robotPlayer
+  robot, estimate, [robotArrived], [humanClear], [reached1u], [reached2d], [farZoneLeft], [g1nzU], [g1nzL], [g2nzD], [g2nzL], 
+  [g3nzU], [g3nzD], [g3nzL], [sameZoneLeft], [sameZoneUp], [sameZoneDown], [gapleft], [gapup], [gapright], [gapdown]
+endplayer
+
+
+player humanPlayer
+  human
+endplayer
+
+
+
+module robot
+	// Robot Arrived but human has not reached goal
+	[robotArrived] turn=2 & reached=0 & robotX=0 -> (turn'=0);
+
+	[humanClear] turn=2 & ((reached=1 & (humanY!=robotY-1) & humanY!=robotY & humanX<robotX) | (reached=2 & (humanY!=robotY+1) & humanY!=robotY & humanX<robotX) | (humanX>=robotX)) & robotX>0 -> (robotX'=robotX-1) & (turn'=0);
+
+	// Human has reached goal 1 or 2 but robot has not cleared human
+	[reached1u] turn=2 & reached=1 & (humanY=robotY | (humanY=robotY-1)) & humanX<robotX -> (robotY'=robotY-1) & (turn'=0);
+	[reached2d] turn=2 & reached=2 & (humanY=robotY | (humanY=robotY+1)) & humanX<robotX -> (robotY'=robotY+1) & (turn'=0);
+
+	// One zone separation
+	[farZoneLeft] turn=2 & (humanX<=4 & robotX>9) -> (robotX'=robotX-1) & (turn'=0);
+
+	// Goal is i and the players are in adjacent zones
+	[g1nzU] turn=2 & goal=1 & (humanX<=4 & robotX>4 & robotX<=9) & robotY>0 & ((humanX=robotX & (humanY>robotY+1 | humanY<robotY-2)) | (humanX=robotX-1 & (humanY>robotY+1 | humanY<robotY-1)) | (humanX<robotX-1)) -> (robotY'=robotY-1) & (turn'=0);
+	[g1nzL] turn=2 & goal=1 & (humanX<=4 & robotX>4 & robotX<=9) & ((humanX=robotX-1 & (humanY<robotY-1 | humanY>robotY+1)) | (humanX=robotX-2 & humanY!=robotY) | (humanX<robotX-2)) -> (robotX'=robotX-1) & (turn'=0);
+	
+	[g2nzD] turn=2 & goal=2 & ((humanX<=4 & robotX>4 & robotX<=9) | (humanX>4 & humanX<=9 & robotX>9)) & robotY<sizeY & ((humanX=robotX & (humanY<robotY-1 | humanY>robotY+2)) | (humanX=robotX-1 & (humanY>robotY+1 | humanY<robotY-1)) | (humanX<robotX-1)) -> (robotY'=robotY+1) & (turn'=0);
+	[g2nzL] turn=2 & goal=2 & ((humanX<=4 & robotX>4 & robotX<=9) | (humanX>4 & humanX<=9 & robotX>9)) & ((humanX=robotX-1 & (humanY<robotY-1 | humanY>robotY+1)) | (humanX=robotX-2 & humanY!=robotY) | (humanX<robotX-2)) -> (robotX'=robotX-1) & (turn'=0);
+
+	[g3nzU] turn=2 & goal=3 & ((humanX<=4 & robotX>4 & robotX<=9) | (humanX>4 & humanX<=9 & robotX>9)) & robotY>0 & ((humanX=robotX & (humanY>robotY+1 | humanY<robotY-2)) | (humanX=robotX-1 & (humanY>robotY+1 | humanY<robotY-1)) | (humanX<robotX-1)) -> (robotY'=robotY-1) & (turn'=0);
+	[g3nzD] turn=2 & goal=3 & ((humanX<=4 & robotX>4 & robotX<=9) | (humanX>4 & humanX<=9 & robotX>9)) & robotY<sizeY & ((humanX=robotX & (humanY<robotY-1 | humanY>robotY+2)) | (humanX=robotX-1 & (humanY>robotY+1 | humanY<robotY-1)) | (humanX<robotX-1)) -> (robotY'=robotY+1) & (turn'=0);
+	[g3nzL] turn=2 & goal=3 & ((humanX<=4 & robotX>4 & robotX<=9) | (humanX>4 & humanX<=9 & robotX>9)) & ((humanX=robotX-1 & (humanY<robotY-1 | humanY>robotY+1)) | (humanX=robotX-2 & humanY!=robotY) | (humanX<robotX-2)) -> (robotX'=robotX-1) & (turn'=0);
+
+	// Human and robot in same zone
+	// Robot cannot move up if goal is 2 and down if goal is 1
+	[sameZoneLeft] turn=2 & ((humanX<=4 & robotX<=4) | (humanX>4 & humanX<=9 & robotX>4 & robotX<=9) | (humanX>9 & robotX>9)) & robotX>0 & ((humanX=robotX-1 & (humanY<robotY-1 | humanY>robotY+1)) | (humanX=robotX-2 & humanY!=robotY) | (humanX<robotX-2)) -> (robotX'=robotX-1) & (turn'=0);
+	[sameZoneUp]   turn=2 & goal!=2 & ((humanX<=4 & robotX<=4) | (humanX>4 & humanX<=9 & robotX>4 & robotX<=9) | (humanX>9 & robotX>9)) & robotY>0 & (humanX<robotX | (humanX=robotX & humanY!=robotY-1 & humanY!=robotY-2)) -> (robotY'=robotY-1) & (turn'=0);
+	[sameZoneDown] turn=2 & goal!=1 & ((humanX<=4 & robotX<=4) | (humanX>4 & humanX<=9 & robotX>4 & robotX<=9) | (humanX>9 & robotX>9)) & robotY<sizeY & (humanX<robotX | (humanX=robotX & humanY!=robotY+1 & humanY!=robotY+2)) -> (robotY'=robotY+1) & (turn'=0);
+
+	// Enforce one cell gap
+	[gapleft] turn=2 & robotX<sizeX & humanY=robotY & (humanX=robotX-1) -> (robotX'=robotX+1) & (turn'=0);
+	[gapup] turn=2 & robotY>0 & ((humanX=robotX) | (humanX=robotX-1) | (humanX=robotX+1)) & (humanY=robotY+1) -> (robotY'=robotY-1) & (turn'=0);
+	[gapright] turn=2 & robotX>0 & humanY=robotY & (humanX=robotX+1) -> (robotX'=robotX-1) & (turn'=0);
+	[gapdown] turn=2 & robotY<sizeY & ((humanX=robotX) | (humanX=robotX-1) | (humanX=robotX+1)) & (humanY=robotY-1) -> (robotY'=robotY+1) & (turn'=0);
+endmodule
+
+
+
+ 
+module estimate
+	// Lower left area until X=2
+	[] turn=1 & humanX<=2 & humanY>2 & goal=1 -> (turn'=2);
+	[] turn=1 & humanX<=2 & humanY>2 & goal!=1 & (count<maxCount) -> (goal'=1) & (turn'=2) & (count'=count+1);
+
+	// Upper left area, until X=7
+	[] turn=1 & humanX<=7 & humanY<2 & goal=2 -> (turn'=2);
+	[] turn=1 & humanX<=7 & humanY<2 & goal!=2 & (count<maxCount) -> (goal'=2) & (turn'=2) & (count'=count+1);
+	
+	// Lower right area, after crossing X=2
+	[] turn=1 & humanX>2 & humanY>2 & goal=3 -> (turn'=2);
+	[] turn=1 & humanX>2 & humanY>2 & goal!=3 & (count<maxCount) -> (goal'=3) & (turn'=2) & (count'=count+1);
+
+	// Upper right area, after crossing X=7
+	[] turn=1 & humanX>7 & humanY<2 & goal=3 -> (turn'=2);
+	[] turn=1 & humanX>7 & humanY<2 & goal!=3 & (count<maxCount) -> (goal'=3) & (turn'=2) & (count'=count+1);
+
+	// Keep goal until crossing X=2
+	[] turn=1 & humanX<=2 & humanY=2 -> (turn'=2);
+
+	// Keep goal after crossing X=2 if it is not 1
+	[] turn=1 & humanX>2 & humanX<=7 & humanY=2 & goal=1 & (count<maxCount) -> (goal'=2) & (turn'=2) & (count'=count+1);
+	[] turn=1 & humanX>2 & humanX<=7 & humanY=2 & goal!=1 -> (turn'=2);
+
+	// Y=2 after crossing X=7
+	[] turn=1 & humanX>7 & humanY=2 & goal=3 -> (turn'=2);	
+	[] turn=1 & humanX>7 & humanY=2 & goal!=3 & (count<maxCount) -> (goal'=3) & (turn'=2) & (count'=count+1);
+
+endmodule
+
+
+
+
+module human
+	// HUMAN IN ZONE 1
+	// top left corner
+	[] turn=0 & goal=1 & (humanX=0) & (humanY=0) -> 0.5:(humanX'=humanX+1) & (turn'=1) + 0.5:(humanY'=humanY+1) & (turn'=1);
+	[] turn=0 & goal=2 & (humanX=0) & (humanY=0) -> 0.9:(humanX'=humanX+1) & (turn'=1) + 0.1:(humanY'=humanY+1) & (turn'=1);
+	[] turn=0 & goal=3 & (humanX=0) & (humanY=0) -> 0.8:(humanX'=humanX+1) & (turn'=1) + 0.2:(humanY'=humanY+1) & (turn'=1);
+
+	// bottom left corner
+	[] turn=0 & goal=1 & (humanX=0) & (humanY=sizeY) -> 0.9:(humanX'=humanX+1) & (turn'=1) + 0.1:(humanY'=humanY-1) & (turn'=1);
+	[] turn=0 & goal=2 & (humanX=0) & (humanY=sizeY) -> 0.5:(humanX'=humanX+1) & (turn'=1) + 0.5:(humanY'=humanY-1) & (turn'=1);
+	[] turn=0 & goal=3 & (humanX=0) & (humanY=sizeY) -> 0.8:(humanX'=humanX+1) & (turn'=1) + 0.2:(humanY'=humanY-1) & (turn'=1);
+
+	// left edge
+	[] turn=0 & goal=1 & (humanX=0) & (humanY!=0) & (humanY!=sizeY) -> 0.45:(humanX'=humanX+1) & (turn'=1) + 0.1:(humanY'=humanY-1) & (turn'=1) + 0.45:(humanY'=humanY+1) & (turn'=1);		
+	[] turn=0 & goal=2 & (humanX=0) & (humanY!=0) & (humanY!=sizeY) -> 0.7:(humanX'=humanX+1) & (turn'=1) + 0.2:(humanY'=humanY-1) & (turn'=1) + 0.1:(humanY'=humanY+1) & (turn'=1);		
+	[] turn=0 & goal=3 & (humanX=0) & (humanY!=0) & (humanY!=sizeY) -> 0.8:(humanX'=humanX+1) & (turn'=1) + 0.1:(humanY'=humanY-1) & (turn'=1) + 0.1:(humanY'=humanY+1) & (turn'=1);			
+
+	// top edge
+	[] turn=0 & goal=1 & (humanX!=0) & (humanX<g1X) & (humanY=0) -> 0.45:(humanX'=humanX+1) & (turn'=1) + 0.1:(humanX'=humanX-1) & (turn'=1) + 0.45:(humanY'=humanY+1) & (turn'=1);
+	[] turn=0 & goal=1 & (humanX=g1X) & (humanY=0) -> 0.05:(humanX'=humanX+1) & (turn'=1) + 0.05:(humanX'=humanX+1) & (turn'=1) + 0.9:(humanY'=humanY+1) & (turn'=1);
+	[] turn=0 & goal=1 & (humanX>g1X) & (humanX<=4) & (humanY=0) -> 0.1:(humanX'=humanX+1) & (turn'=1) + 0.45:(humanX'=humanX-1) & (turn'=1) + 0.45:(humanY'=humanY+1) & (turn'=1);
+	[] turn=0 & goal=2 & (humanX!=0) & (humanX<=4) & (humanY=0) -> 0.9:(humanX'=humanX+1) & (turn'=1) + 0.05:(humanX'=humanX-1) & (turn'=1) + 0.05:(humanY'=humanY+1) & (turn'=1);
+	[] turn=0 & goal=3 & (humanX!=0) & (humanX<=4) & (humanY=0) -> 0.8:(humanX'=humanX+1) & (turn'=1) + 0.1:(humanX'=humanX-1) & (turn'=1) + 0.1:(humanY'=humanY+1) & (turn'=1);
+
+	// bottom edge
+	[] turn=0 & goal=1 & (humanX!=0) & (humanX<g1X) & (humanY=sizeY) -> 0.9:(humanX'=humanX+1) & (turn'=1) + 0.05:(humanX'=humanX-1) & (turn'=1) + 0.05:(humanY'=humanY-1) & (turn'=1);
+	[] turn=0 & goal=1 & (humanX>g1X) & (humanX<=4) & (humanY=sizeY) -> 0.05:(humanX'=humanX+1) & (turn'=1) + 0.9:(humanX'=humanX-1) & (turn'=1) + 0.05:(humanY'=humanY-1) & (turn'=1);
+	[] turn=0 & goal=2 & (humanX!=0) & (humanX<=4) & (humanY=sizeY) -> 0.7:(humanX'=humanX+1) & (turn'=1) + 0.15:(humanX'=humanX-1) & (turn'=1) + 0.15:(humanY'=humanY-1) & (turn'=1);
+	[] turn=0 & goal=3 & (humanX!=0) & (humanX<=4) & (humanY=sizeY) -> 0.8:(humanX'=humanX+1) & (turn'=1) + 0.1:(humanX'=humanX-1) & (turn'=1) + 0.1:(humanY'=humanY-1) & (turn'=1);
+
+	// interior
+	[] turn=0 & goal=1 & (humanX=g1X) & (humanY!=0) & (humanY!=sizeY) -> 0.025:(humanX'=humanX+1) & (turn'=1) + 0.025:(humanX'=humanX-1) & (turn'=1) + 0.9:(humanY'=humanY+1) & (turn'=1) + 0.05:(humanY'=humanY-1) & (turn'=1);
+	[] turn=0 & goal=1 & (humanX!=0) & (humanX<g1X) & (humanY!=0) & (humanY!=sizeY) -> 0.45:(humanX'=humanX+1) & (turn'=1) + 0.05:(humanX'=humanX-1) & (turn'=1) + 0.45:(humanY'=humanY+1) & (turn'=1) + 0.05:(humanY'=humanY-1) & (turn'=1);
+	[] turn=0 & goal=1 & (humanX<=4) & (humanX>g1X) & (humanY!=0) & (humanY!=sizeY) -> 0.05:(humanX'=humanX+1) & (turn'=1) + 0.45:(humanX'=humanX-1) & (turn'=1) + 0.45:(humanY'=humanY+1) & (turn'=1) + 0.05:(humanY'=humanY-1) & (turn'=1);
+	[] turn=0 & goal=2 & (humanX!=0) & (humanX<=4) & (humanY!=0) & (humanY!=sizeY) -> 0.7:(humanX'=humanX+1) & (turn'=1) + 0.1:(humanX'=humanX-1) & (turn'=1) + 0.1:(humanY'=humanY+1) & (turn'=1) + 0.1:(humanY'=humanY-1) & (turn'=1);
+	[] turn=0 & goal=3 & (humanX!=0) & (humanX<=4) & (humanY!=0) & (humanY!=sizeY) -> 0.75:(humanX'=humanX+1) & (turn'=1) + 0.05:(humanX'=humanX-1) & (turn'=1) + 0.1:(humanY'=humanY+1) & (turn'=1) + 0.1:(humanY'=humanY-1) & (turn'=1);
+
+
+	// HUMAN IN ZONE 2
+	// top edge
+	[] turn=0 & goal=2 & (humanX>4) & (humanX<g2X) & (humanY=0) -> 0.45:(humanX'=humanX+1) & (turn'=1) + 0.1:(humanX'=humanX-1) & (turn'=1) + 0.45:(humanY'=humanY+1) & (turn'=1);
+	[] turn=0 & goal=2 & (humanX>g2X) & (humanX<=9) & (humanY=0) -> 0.1:(humanX'=humanX+1) & (turn'=1) + 0.45:(humanX'=humanX-1) & (turn'=1) + 0.45:(humanY'=humanY+1) & (turn'=1);
+	[] turn=0 & goal=3 & (humanX>4) & (humanX<=9) & (humanY=0) -> 0.4:(humanX'=humanX+1) & (turn'=1) + 0.2:(humanX'=humanX-1) & (turn'=1) + 0.4:(humanY'=humanY+1) & (turn'=1);
+
+	// bottom edge
+	[] turn=0 & goal=2 & (humanX>4) & (humanX<g2X) & (humanY=sizeY) -> 0.45:(humanX'=humanX+1) & (turn'=1) + 0.1:(humanX'=humanX-1) & (turn'=1) + 0.45:(humanY'=humanY-1) & (turn'=1);
+	[] turn=0 & goal=2 & (humanX=g2X) & (humanY=sizeY) -> 0.05:(humanX'=humanX+1) & (turn'=1) + 0.05:(humanX'=humanX+1) & (turn'=1) + 0.9:(humanY'=humanY-1) & (turn'=1);
+	[] turn=0 & goal=2 & (humanX>g2X) & (humanX<=9) & (humanY=sizeY) -> 0.1:(humanX'=humanX+1) & (turn'=1) + 0.45:(humanX'=humanX-1) & (turn'=1) + 0.45:(humanY'=humanY-1) & (turn'=1);
+	[] turn=0 & goal=3 & (humanX>4) & (humanX<=9) & (humanY=sizeY) -> 0.4:(humanX'=humanX+1) & (turn'=1) + 0.2:(humanX'=humanX-1) & (turn'=1) + 0.4:(humanY'=humanY-1) & (turn'=1);
+
+	// interior
+	[] turn=0 & goal=2 & (humanX=g2X) & (humanY!=0) & (humanY!=sizeY) -> 0.025:(humanX'=humanX+1) & (turn'=1) + 0.025:(humanX'=humanX-1) & (turn'=1) + 0.05:(humanY'=humanY+1) & (turn'=1) + 0.9:(humanY'=humanY-1) & (turn'=1);
+	[] turn=0 & goal=2 & (humanX>4) & (humanX<g2X) & (humanY!=0) & (humanY!=sizeY) -> 0.45:(humanX'=humanX+1) & (turn'=1) + 0.05:(humanX'=humanX-1) & (turn'=1) + 0.05:(humanY'=humanY+1) & (turn'=1) + 0.45:(humanY'=humanY-1) & (turn'=1);
+	[] turn=0 & goal=2 & (humanX<=9) & (humanX>g2X) & (humanY!=0) & (humanY!=sizeY) -> 0.05:(humanX'=humanX+1) & (turn'=1) + 0.45:(humanX'=humanX-1) & (turn'=1) + 0.05:(humanY'=humanY+1) & (turn'=1) + 0.45:(humanY'=humanY-1) & (turn'=1);
+	[] turn=0 & goal=3 & (humanX>4) & (humanX<=9) & (humanY!=0) & (humanY!=sizeY) -> 0.7:(humanX'=humanX+1) & (turn'=1) + 0.1:(humanX'=humanX-1) & (turn'=1) + 0.1:(humanY'=humanY+1) & (turn'=1) + 0.1:(humanY'=humanY-1) & (turn'=1);
+
+
+	// HUMAN IN ZONE 3
+	// top right corner
+	[] turn=0 & goal=3 & (humanX=sizeX) & (humanY=0) -> 0.9:(humanY'=humanY+1) & (turn'=1) + 0.1:(humanX'=humanX-1) & (turn'=1);
+	// bottom right corner
+	[] turn=0 & goal=3 & (humanX=sizeX) & (humanY=sizeY) -> 0.9:(humanY'=humanY-1) & (turn'=1) + 0.1:(humanX'=humanX-1) & (turn'=1);
+	// top edge
+	[] turn=0 & goal=3 & (humanX>9) & (humanX!=sizeX) & (humanY=0) -> 0.45:(humanX'=humanX+1) & (turn'=1) + 0.1:(humanX'=humanX-1) & (turn'=1) + 0.45:(humanY'=humanY+1) & (turn'=1);
+	// bottom edge
+	[] turn=0 & goal=3 & (humanX>9) & (humanX!=sizeX) & (humanY=sizeY) -> 0.45:(humanX'=humanX+1) & (turn'=1) + 0.1:(humanX'=humanX-1) & (turn'=1) + 0.45:(humanY'=humanY-1) & (turn'=1); 
+
+	// right edge
+	[] turn=0 & goal=3 & (humanX=sizeX) & (humanY<g3Y) & (humanY!=0) -> 0.05:(humanX'=humanX-1) & (turn'=1) + 0.9:(humanY'=humanY+1) & (turn'=1) + 0.05:(humanY'=humanY-1) & (turn'=1);
+	[] turn=0 & goal=3 & (humanX=sizeX) & (humanY>g3Y) & (humanY!=sizeY) -> 0.05:(humanX'=humanX-1) & (turn'=1) + 0.05:(humanY'=humanY+1) & (turn'=1) + 0.9:(humanY'=humanY-1) & (turn'=1);
+
+	// interior
+	[] turn=0 & goal=3 & (humanX>9) & (humanX<sizeX) & (humanY=g3Y) -> 0.9:(humanX'=humanX+1) & (turn'=1) + 0.05:(humanX'=humanX-1) & (turn'=1) + 0.025:(humanY'=humanY+1) & (turn'=1) + 0.025:(humanY'=humanY-1) & (turn'=1);
+	[] turn=0 & goal=3 & (humanX>9) & (humanX<sizeX) & (humanY<g3Y) & (humanY!=0) -> 0.45:(humanX'=humanX+1) & (turn'=1) + 0.05:(humanX'=humanX-1) & (turn'=1) + 0.45:(humanY'=humanY+1) & (turn'=1) + 0.05:(humanY'=humanY-1) & (turn'=1);
+	[] turn=0 & goal=3 & (humanX>9) & (humanX<sizeX) & (humanY>g3Y) & (humanY!=sizeY) -> 0.45:(humanX'=humanX+1) & (turn'=1) + 0.05:(humanX'=humanX-1) & (turn'=1) + 0.05:(humanY'=humanY+1) & (turn'=1) + 0.45:(humanY'=humanY-1) & (turn'=1);
+
+
+	// HUMAN REACHED GOAL
+	[] turn=0 & goal=1 & (humanX=g1X) & (humanY=g1Y) -> (turn'=1) & (reached'=1);
+	[] turn=0 & goal=2 & (humanX=g2X) & (humanY=g2Y) -> (turn'=1) & (reached'=2);
+	[] turn=0 & goal=3 & (humanX=g3X) & (humanY=g3Y) -> (turn'=1) & (reached'=3);
+endmodule
+
+
+
+
+
+
+

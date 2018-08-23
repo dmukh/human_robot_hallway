@@ -1,0 +1,2 @@
+<<robot,human>> Pmax=? [ F (robotX=0) | (count>5) ]
+

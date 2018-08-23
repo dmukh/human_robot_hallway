@@ -1,0 +1,9 @@
+HEIGHT: 5
+WIDTH: 15
+
+BLOCK: agent 0 2
+BLOCK: moving_obstacle 14 2
+
+BLOCK: goal 2 4
+BLOCK: goal 7 0
+BLOCK: goal 14 2

@@ -1,0 +1,147 @@
+# Automaton for Human-Robot Hallway Toy Problem
+0 -> <hLoc:[0,0], rLoc:[0,0], goal:1>
+  Successors: 73
+1 -> <hLoc:[0,0], rLoc:[0,0], goal:2>
+  Successors: 73
+2 -> <hLoc:[0,0], rLoc:[0,1], goal:1>
+  Successors: 
+3 -> <hLoc:[0,0], rLoc:[0,1], goal:2>
+  Successors: 
+4 -> <hLoc:[0,0], rLoc:[0,2], goal:1>
+  Successors: 
+5 -> <hLoc:[0,0], rLoc:[0,2], goal:2>
+  Successors: 
+6 -> <hLoc:[0,0], rLoc:[1,0], goal:1>
+  Successors: 
+7 -> <hLoc:[0,0], rLoc:[1,0], goal:2>
+  Successors: 
+8 -> <hLoc:[0,0], rLoc:[1,1], goal:1>
+  Successors: 
+9 -> <hLoc:[0,0], rLoc:[1,1], goal:2>
+  Successors: 
+10 -> <hLoc:[0,0], rLoc:[1,2], goal:1>
+  Successors: 
+11 -> <hLoc:[0,0], rLoc:[1,2], goal:2>
+  Successors: 
+12 -> <hLoc:[0,1], rLoc:[0,0], goal:1>
+  Successors: 
+13 -> <hLoc:[0,1], rLoc:[0,0], goal:2>
+  Successors: 
+14 -> <hLoc:[0,1], rLoc:[0,1], goal:1>
+  Successors: 73
+15 -> <hLoc:[0,1], rLoc:[0,1], goal:2>
+  Successors: 73
+16 -> <hLoc:[0,1], rLoc:[0,2], goal:1>
+  Successors: 
+17 -> <hLoc:[0,1], rLoc:[0,2], goal:2>
+  Successors: 
+18 -> <hLoc:[0,1], rLoc:[1,0], goal:1>
+  Successors: 
+19 -> <hLoc:[0,1], rLoc:[1,0], goal:2>
+  Successors: 
+20 -> <hLoc:[0,1], rLoc:[1,1], goal:1>
+  Successors: 
+21 -> <hLoc:[0,1], rLoc:[1,1], goal:2>
+  Successors: 
+22 -> <hLoc:[0,1], rLoc:[1,2], goal:1>
+  Successors: 
+23 -> <hLoc:[0,1], rLoc:[1,2], goal:2>
+  Successors: 
+24 -> <hLoc:[0,2], rLoc:[0,0], goal:1>
+  Successors: 72
+25 -> <hLoc:[0,2], rLoc:[0,0], goal:2>
+  Successors: 
+26 -> <hLoc:[0,2], rLoc:[0,1], goal:1>
+  Successors: 
+27 -> <hLoc:[0,2], rLoc:[0,1], goal:2>
+  Successors: 
+28 -> <hLoc:[0,2], rLoc:[0,2], goal:1>
+  Successors: 73
+29 -> <hLoc:[0,2], rLoc:[0,2], goal:2>
+  Successors: 73
+30 -> <hLoc:[0,2], rLoc:[1,0], goal:1>
+  Successors: 72
+31 -> <hLoc:[0,2], rLoc:[1,0], goal:2>
+  Successors: 
+32 -> <hLoc:[0,2], rLoc:[1,1], goal:1>
+  Successors: 
+33 -> <hLoc:[0,2], rLoc:[1,1], goal:2>
+  Successors: 
+34 -> <hLoc:[0,2], rLoc:[1,2], goal:1>
+  Successors: 
+35 -> <hLoc:[0,2], rLoc:[1,2], goal:2>
+  Successors: 
+36 -> <hLoc:[1,0], rLoc:[0,0], goal:1>
+  Successors: 
+37 -> <hLoc:[1,0], rLoc:[0,0], goal:2>
+  Successors: 
+38 -> <hLoc:[1,0], rLoc:[0,1], goal:1>
+  Successors: 
+39 -> <hLoc:[1,0], rLoc:[0,1], goal:2>
+  Successors: 
+40 -> <hLoc:[1,0], rLoc:[0,2], goal:1>
+  Successors: 
+41 -> <hLoc:[1,0], rLoc:[0,2], goal:2>
+  Successors: 
+42 -> <hLoc:[1,0], rLoc:[1,0], goal:1>
+  Successors: 73
+43 -> <hLoc:[1,0], rLoc:[1,0], goal:2>
+  Successors: 73
+44 -> <hLoc:[1,0], rLoc:[1,1], goal:1>
+  Successors: 
+45 -> <hLoc:[1,0], rLoc:[1,1], goal:2>
+  Successors: 
+46 -> <hLoc:[1,0], rLoc:[1,2], goal:1>
+  Successors: 
+47 -> <hLoc:[1,0], rLoc:[1,2], goal:2>
+  Successors: 
+48 -> <hLoc:[1,1], rLoc:[0,0], goal:1>
+  Successors: 
+49 -> <hLoc:[1,1], rLoc:[0,0], goal:2>
+  Successors: 
+50 -> <hLoc:[1,1], rLoc:[0,1], goal:1>
+  Successors: 
+51 -> <hLoc:[1,1], rLoc:[0,1], goal:2>
+  Successors: 
+52 -> <hLoc:[1,1], rLoc:[0,2], goal:1>
+  Successors: 
+53 -> <hLoc:[1,1], rLoc:[0,2], goal:2>
+  Successors: 
+54 -> <hLoc:[1,1], rLoc:[1,0], goal:1>
+  Successors: 
+55 -> <hLoc:[1,1], rLoc:[1,0], goal:2>
+  Successors: 
+56 -> <hLoc:[1,1], rLoc:[1,1], goal:1>
+  Successors: 73
+57 -> <hLoc:[1,1], rLoc:[1,1], goal:2>
+  Successors: 73
+58 -> <hLoc:[1,1], rLoc:[1,2], goal:1>
+  Successors: 
+59 -> <hLoc:[1,1], rLoc:[1,2], goal:2>
+  Successors: 
+60 -> <hLoc:[1,2], rLoc:[0,0], goal:1>
+  Successors: 
+61 -> <hLoc:[1,2], rLoc:[0,0], goal:2>
+  Successors: 72
+62 -> <hLoc:[1,2], rLoc:[0,1], goal:1>
+  Successors: 
+63 -> <hLoc:[1,2], rLoc:[0,1], goal:2>
+  Successors: 
+64 -> <hLoc:[1,2], rLoc:[0,2], goal:1>
+  Successors: 
+65 -> <hLoc:[1,2], rLoc:[0,2], goal:2>
+  Successors: 
+66 -> <hLoc:[1,2], rLoc:[1,0], goal:1>
+  Successors: 
+67 -> <hLoc:[1,2], rLoc:[1,0], goal:2>
+  Successors: 72
+68 -> <hLoc:[1,2], rLoc:[1,1], goal:1>
+  Successors: 
+69 -> <hLoc:[1,2], rLoc:[1,1], goal:2>
+  Successors: 
+70 -> <hLoc:[1,2], rLoc:[1,2], goal:1>
+  Successors: 73
+71 -> <hLoc:[1,2], rLoc:[1,2], goal:2>
+  Successors: 73
+72 -> <0-sink>
+73 -> <1-sink>

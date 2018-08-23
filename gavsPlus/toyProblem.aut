@@ -1,0 +1,30 @@
+# Automaton for Human-Robot Hallway Toy Problem
+41 -> <hLoc:[1,0], rLoc:[0,2], goal:2>
+  Successors: 51(0.9), 10(0.1)
+51 -> <hLoc:[1,1], rLoc:[0,1], goal:2>
+  Successors: 61(0.9), 37(0.1)
+10 -> <hLoc:[0,0], rLoc:[1,2], goal:1>
+  Successors: 20(0.9), 41(0.1)
+61 -> <hLoc:[1,2], rLoc:[0,0], goal:2>
+  Successors: 72(1)
+37 -> <hLoc:[1,0], rLoc:[0,0], goal:2>
+  Successors: 49(1)
+20 -> <hLoc:[0,1], rLoc:[1,1], goal:1>
+  Successors: 30(0.9), 6(0.1)
+30 -> <hLoc:[0,2], rLoc:[1,0], goal:1>
+  Successors: 72(1)
+6 -> <hLoc:[0,0], rLoc:[1,0], goal:1>
+  Successors: 18(1)
+18 -> <hLoc:[0,1], rLoc:[1,0], goal:1>
+  Successors: 30(0.9), 6(0.05), 55(0.05)
+55 -> <hLoc:[1,1], rLoc:[1,0], goal:2>
+  Successors: 67(0.9), 18(0.1)
+67 -> <hLoc:[1,2], rLoc:[1,0], goal:2>
+  Successors: 72
+49 -> <hLoc:[1,1], rLoc:[0,0], goal:2>
+  Successors: 61(0.9), 37(0.05), 12(0.05)
+12 -> <hLoc:[0,1], rLoc:[0,0], goal:1>
+  Successors: 24(0.9), 49(0.1)
+24 -> <hLoc:[0,2], rLoc:[0,0], goal:1>
+  Successors: 72(1)
+72 -> <0-sink>
