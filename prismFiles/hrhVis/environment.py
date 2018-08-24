@@ -5,7 +5,6 @@ import bisect
 
 class Simulation:
 
-
     grid = []
     agent_blocks = []
     moving_obstacles = []
@@ -35,8 +34,6 @@ class Simulation:
                     for row in range(self.HEIGHT):
                         self.grid[column].append(Empty_block())
 
-            #elif line[0] == "MARGIN:":
-            #    self.MARGIN = int(line[1])
             elif line[0] == "BLOCK:":
                 if line[1] == "agent":
                     self.agent_blocks.append(Agent_block(int(line[2]),int(line[3])))
@@ -115,8 +112,6 @@ class Simulation:
         dict_blocks = {"agents": agent_list, "fixed_obstacles": fixed_obstacle_list, "moving_obstacles": moving_obstacle_list}
 
         return dict_blocks
-
-    #action = weighted_choice([(1,0), (0,100)])
 
     def weighted_choice(self, choices):
         values, weights = zip(*choices)
@@ -280,8 +275,6 @@ class Simulation:
             counter += 1
 
 
-    
-
     def move(self, movement):
         self.move_obstacles()
         self.draw()
@@ -313,11 +306,6 @@ class Simulation:
             return True, 0
 
         return False, self.get_state()
-
-
-                    
-        
-
 
 class Block():
     color = (0,0,0)

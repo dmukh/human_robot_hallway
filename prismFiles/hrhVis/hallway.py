@@ -67,9 +67,6 @@ class Hallway(Simulation):
                 if movement[agent] == "keyboard":
                     self.move_agent(agent, self.get_key())
             self.draw()
-        # print gameState
-        # print stateList.index(gameState)
-
 
         # ESTIMATE GOAL
         # Determine new state
@@ -78,18 +75,7 @@ class Hallway(Simulation):
         robotY = gridState['moving_obstacles'][0][1]
         humanX = gridState['agents'][0][0]
         humanY = gridState['agents'][0][1]
-        # if goal==1 and humanX==2 and humanY==4:
-        #     reached = 1
-        # elif goal==2 and humanX==7 and humanY==0:
-        #     reached = 2
-        # elif goal==3 and humanX==14 and humanY==2:
-        #     reached = 3
-        # else:
-        #     reached = 0
-        # gameState = [1, gameState[1], gameState[2], robotX, robotY, humanX, humanY]
         gameState = [1, goal, reached, count, robotX, robotY, humanX, humanY]
-        # print gameState
-        # print stateList.index(gameState)
         
         # Find succ trans state
         ind = stateList.index(gameState)
@@ -99,17 +85,11 @@ class Hallway(Simulation):
                 targ = row[2]
 
         gameState = stateList[targ]
-        # print gameState
-
-
 
         # Check event
         if (self.handle_events()):
             return True, 0, goal, count, gameState
 
-
-        # print gameState
-        # print stateList.index(gameState)
 
         goal = gameState[1]
         count = gameState[3]
@@ -139,8 +119,6 @@ class Hallway(Simulation):
 
             self.move_obstacle(0, action)
             self.draw()
-        # print gameState
-        # print stateList.index(gameState)
 
         if (self.step_forward() or (rXnext==0 and reached>0)):
             return True, 0, goal, count, gameState

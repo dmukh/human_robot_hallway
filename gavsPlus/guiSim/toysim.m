@@ -83,14 +83,6 @@ end
 % UIWAIT makes toysim wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
-
-
-
-
-
-
-
-
 % --- Outputs from this function are returned to the command line.
 function varargout = toysim_OutputFcn(hObject, eventdata, handles) 
 % varargout  cell array for returning output args (see VARARGOUT);

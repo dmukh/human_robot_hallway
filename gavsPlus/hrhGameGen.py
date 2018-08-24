@@ -76,7 +76,6 @@ def findSuccStates(state):
 	for ii in xrange(0, len(rLocNext)):
 		rLocNext[ii] = rGridNext[ii][0] + rGridNext[ii][1]*rows
 
-
 	# Successor states
 	succState = []
 	succStateNum = []
@@ -99,19 +98,10 @@ def findSuccStates(state):
 
 	return [succState, succStateNum, probSucc]
 
-
-
 def getProbTransition(state, targetState, hGridNext, rGridNext):
 	# Probability of human action
-
 	h = .1
-
-
-
-
-   
 	return h * (1./3)
-
 
 
 def checkSafetySat(state, targetState):
@@ -132,13 +122,8 @@ def checkSafetySat(state, targetState):
 		return False
 
 
-
 def checkProgressSat(path):
 	return True
-
-
-
-
 
 
 # Main
@@ -174,48 +159,14 @@ if 'aut' in sys.argv:
 
 	os.rename('tmp.aut', autFile)
 
-
-
 if 'game' in sys.argv:
 	# Generate Game File
 	initState = [2, 72, 1, 0]
 	initStateNum = getStateNum(initState)
 
-
-
-
-
 	with open(gameFile, 'w') as f:
 		f.write('## GAVS+ game file for Human-Robot Hallway Problem\n')
 		f.write('0:1')
-
-
-
-	print '234'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 if 'test' in sys.argv:
 	initState = [2,72,1,0]
@@ -232,15 +183,4 @@ if 'test' in sys.argv:
 	else:
 		print False
 		print getStateFromNum(num)
-
-
-
-
-
-
-
-
-
-
-
 

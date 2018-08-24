@@ -6,14 +6,12 @@ import Tkinter as tk
 from PIL import Image, ImageTk
 import time
 
-
 autFile = 'toyProblemFull'
 simAut = 'toyProblem'
 
 rows = 2
 cols = 3
 goals = 2
-
 
 def createAutFile(fname):
 	stateCount = 0
@@ -36,7 +34,6 @@ def createAutFile(fname):
 		stateCount = stateCount + 1
 		f.write(str(stateCount) + ' -> <1-sink>\n')
 		stateCount = stateCount + 1
-
 
 
 def readAutFile(fname):
@@ -68,11 +65,8 @@ def readAutFile(fname):
 	return [state, succ, prob]
 
 
-
 if 'newAut' in sys.argv:
 	createAutFile(autFile + '.aut')
-
-
 
 if 'simulate' in sys.argv:
 	out = readAutFile(simAut+'.aut')
@@ -102,16 +96,3 @@ if 'simulate' in sys.argv:
 
 	print stateSeq
 
-
-
-
-
-
-
-
-
-
-
-
-
-		
